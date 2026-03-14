@@ -19,15 +19,15 @@ from shock_simulator import ShockSimulator
 from sector_model import SectorImpactModel
 from visualizations import Visualizer
 
-# ─── PAGE CONFIG ────────────────────────────────────────────────────────────
+# â”€â”€â”€ PAGE CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 st.set_page_config(
     page_title="Global Market Shock Analyzer",
-    page_icon="🌐",
+    page_icon="ðŸŒ",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ─── CUSTOM CSS ─────────────────────────────────────────────────────────────
+# â”€â”€â”€ CUSTOM CSS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
@@ -239,54 +239,53 @@ div[data-testid="metric-container"] {
 """, unsafe_allow_html=True)
 
 
-# ─── CACHED DATA LOADING ─────────────────────────────────────────────────────
+# â”€â”€â”€ CACHED DATA LOADING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 @st.cache_data(ttl=300)  # Refresh every 5 minutes
 def load_market_data():
     collector = DataCollector()
     return collector.fetch_all()
 
-@st.cache_data(ttl=300)
 def compute_analytics(raw_data):
     engine = AnalyticsEngine(raw_data)
     return engine.compute_all()
 
 
-# ─── MAIN APP ────────────────────────────────────────────────────────────────
+# â”€â”€â”€ MAIN APP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 def main():
-    # ── Header ──────────────────────────────────────────────────────────────
+    # â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     col_title, col_status = st.columns([3, 1])
     with col_title:
-        st.markdown('<div class="main-title">⚡ Global Market Shock Analyzer</div>', unsafe_allow_html=True)
-        st.markdown('<div class="sub-title">Quantitative Risk Intelligence Platform · v2.0</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-title">âš¡ Global Market Shock Analyzer</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-title">Quantitative Risk Intelligence Platform Â· v2.0</div>', unsafe_allow_html=True)
     with col_status:
         st.markdown('<br>', unsafe_allow_html=True)
         st.markdown('<div class="status-bar"><span class="status-live"></span> LIVE DATA FEED ACTIVE</div>', unsafe_allow_html=True)
 
-    # ── Sidebar ──────────────────────────────────────────────────────────────
+    # â”€â”€ Sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     with st.sidebar:
-        st.markdown('<div class="section-header">⚙ System Controls</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">âš™ System Controls</div>', unsafe_allow_html=True)
 
-        if st.button("🔄 Refresh Market Data"):
+        if st.button("ðŸ”„ Refresh Market Data"):
             st.cache_data.clear()
             st.rerun()
 
-        st.markdown('<div class="section-header">🌪 Shock Simulator</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">ðŸŒª Shock Simulator</div>', unsafe_allow_html=True)
         shock_scenario = st.selectbox(
             "Select Macro Shock Scenario",
             ["None", "WAR", "RATE_HIKE", "OIL_SHOCK", "PANDEMIC", "CURRENCY_CRISIS"],
             format_func=lambda x: {
-                "None": "— No Shock Applied —",
-                "WAR": "🔴 Geopolitical War",
-                "RATE_HIKE": "📈 Interest Rate Hike",
-                "OIL_SHOCK": "🛢️ Oil Supply Shock",
-                "PANDEMIC": "🦠 Pandemic / Health Crisis",
-                "CURRENCY_CRISIS": "💱 Currency Crisis"
+                "None": "â€” No Shock Applied â€”",
+                "WAR": "ðŸ”´ Geopolitical War",
+                "RATE_HIKE": "ðŸ“ˆ Interest Rate Hike",
+                "OIL_SHOCK": "ðŸ›¢ï¸ Oil Supply Shock",
+                "PANDEMIC": "ðŸ¦  Pandemic / Health Crisis",
+                "CURRENCY_CRISIS": "ðŸ’± Currency Crisis"
             }.get(x, x)
         )
 
         shock_intensity = st.slider("Shock Intensity Multiplier", 0.5, 3.0, 1.0, 0.1)
 
-        st.markdown('<div class="section-header">📊 Chart Settings</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">ðŸ“Š Chart Settings</div>', unsafe_allow_html=True)
         chart_period = st.selectbox("Data Period", ["1mo", "3mo", "6mo", "1y"], index=1)
         primary_asset = st.selectbox(
             "Primary Asset for Technical Analysis",
@@ -300,7 +299,7 @@ def main():
             }.get(x, x)
         )
 
-        st.markdown('<div class="section-header">ℹ About</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">â„¹ About</div>', unsafe_allow_html=True)
         st.markdown("""
         <div style='font-family: Share Tech Mono, monospace; font-size: 0.7rem; color: #5a8aaa; line-height: 1.8;'>
         DATA: yfinance API<br>
@@ -310,20 +309,19 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-    # ── Load Data ────────────────────────────────────────────────────────────
-    with st.spinner("📡 Fetching live market data..."):
+    # â”€â”€ Load Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    with st.spinner("ðŸ“¡ Fetching live market data..."):
         raw_data = load_market_data()
 
     if not raw_data:
-        st.error("⚠️ Failed to load market data. Please check your connection and try again.")
+        st.error("âš ï¸ Failed to load market data. Please check your connection and try again.")
         return
 
-    # ── Compute Analytics ────────────────────────────────────────────────────
-    analytics = compute_analytics(str(raw_data.keys()))  # cache key
+    # â”€â”€ Compute Analytics â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     engine = AnalyticsEngine(raw_data)
     indicators = engine.compute_all()
 
-    # ── Apply Shock Simulation ───────────────────────────────────────────────
+    # â”€â”€ Apply Shock Simulation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     simulator = ShockSimulator(raw_data, indicators)
     if shock_scenario != "None":
         shocked_data, shocked_indicators, shock_details = simulator.apply_shock(
@@ -338,17 +336,17 @@ def main():
         shock_active = False
         shock_details = None
 
-    # ── Compute Risk Score ───────────────────────────────────────────────────
+    # â”€â”€ Compute Risk Score â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     riskometer = RiskometerModel(active_indicators, active_raw)
     risk_result = riskometer.compute()
 
     sector_model = SectorImpactModel()
     viz = Visualizer()
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 1 — RISKOMETER + MACRO OVERVIEW
-    # ════════════════════════════════════════════════════════════════════════
-    st.markdown('<div class="section-header">🎯 Market Riskometer</div>', unsafe_allow_html=True)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 1 â€” RISKOMETER + MACRO OVERVIEW
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    st.markdown('<div class="section-header">ðŸŽ¯ Market Riskometer</div>', unsafe_allow_html=True)
 
     col_gauge, col_scores, col_macro = st.columns([2, 1.2, 1.8])
 
@@ -360,11 +358,11 @@ def main():
         st.markdown('<div class="section-header">Component Scores</div>', unsafe_allow_html=True)
         scores = risk_result['component_scores']
         score_labels = {
-            'macro': '🌍 Macro',
-            'sentiment': '😨 Sentiment',
-            'technical': '📐 Technical',
-            'order_flow': '💧 Order Flow',
-            'risk_metrics': '⚠️ Risk Metrics'
+            'macro': 'ðŸŒ Macro',
+            'sentiment': 'ðŸ˜¨ Sentiment',
+            'technical': 'ðŸ“ Technical',
+            'order_flow': 'ðŸ’§ Order Flow',
+            'risk_metrics': 'âš ï¸ Risk Metrics'
         }
         for key, label in score_labels.items():
             val = scores.get(key, 0.5)
@@ -388,16 +386,16 @@ def main():
         st.markdown('<div class="section-header">Macro Indicators</div>', unsafe_allow_html=True)
         macro = active_indicators.get('macro', {})
         macro_display = [
-            ("🛢️ Crude Oil", "oil_price", "$", ""),
-            ("🥇 Gold", "gold_price", "$", ""),
-            ("💵 Dollar Index", "dollar_index", "", ""),
-            ("📈 10Y Yield", "bond_yield", "", "%"),
+            ("ðŸ›¢ï¸ Crude Oil", "oil_price", "$", ""),
+            ("ðŸ¥‡ Gold", "gold_price", "$", ""),
+            ("ðŸ’µ Dollar Index", "dollar_index", "", ""),
+            ("ðŸ“ˆ 10Y Yield", "bond_yield", "", "%"),
         ]
         for label, key, prefix, suffix in macro_display:
             val = macro.get(key, 0)
             chg = macro.get(f"{key}_pct_chg", 0)
             delta_class = "metric-delta-pos" if chg >= 0 else "metric-delta-neg"
-            arrow = "▲" if chg >= 0 else "▼"
+            arrow = "â–²" if chg >= 0 else "â–¼"
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">{label}</div>
@@ -406,27 +404,27 @@ def main():
             </div>
             """, unsafe_allow_html=True)
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 2 — SHOCK BANNER (if active)
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 2 â€” SHOCK BANNER (if active)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     if shock_active and shock_details:
         st.markdown(f"""
         <div style='background:rgba(255,107,0,0.08);border:1px solid #ff6b00;border-radius:8px;
         padding:1rem 1.2rem;margin:0.5rem 0;'>
             <div style='font-family:Orbitron,monospace;font-size:0.8rem;color:#ff6b00;
             letter-spacing:0.2em;margin-bottom:0.5rem;'>
-            🌪 SHOCK SCENARIO ACTIVE: {shock_scenario.replace("_"," ")} (×{shock_intensity:.1f})
+            ðŸŒª SHOCK SCENARIO ACTIVE: {shock_scenario.replace("_"," ")} (Ã—{shock_intensity:.1f})
             </div>
             <div style='font-family:Share Tech Mono,monospace;font-size:0.75rem;color:#aaa;'>
-            {" · ".join([f"{k}: {v:+.1f}%" if 'pct' in k.lower() else f"{k}: {v:+.2f}" for k,v in list(shock_details.items())[:8]])}
+            {" Â· ".join([f"{k}: {v:+.1f}%" if 'pct' in k.lower() else f"{k}: {v:+.2f}" for k,v in list(shock_details.items())[:8]])}
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 3 — TECHNICAL CHARTS
-    # ════════════════════════════════════════════════════════════════════════
-    st.markdown('<div class="section-header">📐 Technical Analysis</div>', unsafe_allow_html=True)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 3 â€” TECHNICAL CHARTS
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    st.markdown('<div class="section-header">ðŸ“ Technical Analysis</div>', unsafe_allow_html=True)
     col_chart, col_tech_vals = st.columns([3, 1])
 
     with col_chart:
@@ -473,13 +471,13 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 4 — SENTIMENT + ORDER FLOW
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 4 â€” SENTIMENT + ORDER FLOW
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     col_sent, col_of = st.columns(2)
 
     with col_sent:
-        st.markdown('<div class="section-header">😨 Sentiment Panel</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">ðŸ˜¨ Sentiment Panel</div>', unsafe_allow_html=True)
         sent = active_indicators.get('sentiment', {})
         vix_val = sent.get('vix', 20)
         vix_color = "#ff2d55" if vix_val > 30 else "#ffd60a" if vix_val > 20 else "#00ff9d"
@@ -510,7 +508,7 @@ def main():
             """, unsafe_allow_html=True)
 
     with col_of:
-        st.markdown('<div class="section-header">💧 Smart Money / Order Flow</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">ðŸ’§ Smart Money / Order Flow</div>', unsafe_allow_html=True)
         of = active_indicators.get('order_flow', {}).get(primary_asset, {})
 
         of_fig = viz.render_order_flow_chart(
@@ -540,10 +538,10 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 5 — SECTOR IMPACT + HEATMAP
-    # ════════════════════════════════════════════════════════════════════════
-    st.markdown('<div class="section-header">🏭 Sector Impact Analysis</div>', unsafe_allow_html=True)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 5 â€” SECTOR IMPACT + HEATMAP
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    st.markdown('<div class="section-header">ðŸ­ Sector Impact Analysis</div>', unsafe_allow_html=True)
 
     col_sector_table, col_sector_heat = st.columns([1, 2])
 
@@ -571,33 +569,33 @@ def main():
         heatmap_fig = viz.render_sector_heatmap(sector_impact, shock_scenario if shock_active else "NONE")
         st.plotly_chart(heatmap_fig, use_container_width=True, config={"displayModeBar": False})
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 6 — MULTI-ASSET OVERVIEW
-    # ════════════════════════════════════════════════════════════════════════
-    st.markdown('<div class="section-header">🌐 Multi-Asset Dashboard</div>', unsafe_allow_html=True)
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 6 â€” MULTI-ASSET OVERVIEW
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    st.markdown('<div class="section-header">ðŸŒ Multi-Asset Dashboard</div>', unsafe_allow_html=True)
     multi_fig = viz.render_multi_asset_chart(raw_data)
     st.plotly_chart(multi_fig, use_container_width=True, config={"displayModeBar": True})
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 7 — SHOCK FLOW DIAGRAM
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 7 â€” SHOCK FLOW DIAGRAM
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     if shock_active:
-        st.markdown('<div class="section-header">🌊 Shock Transmission Flow</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">ðŸŒŠ Shock Transmission Flow</div>', unsafe_allow_html=True)
         flow_fig = viz.render_shock_flow_diagram(shock_scenario, shock_details, sector_impact)
         st.plotly_chart(flow_fig, use_container_width=True, config={"displayModeBar": False})
 
-    # ════════════════════════════════════════════════════════════════════════
-    # ROW 8 — INDICATOR TABLE
-    # ════════════════════════════════════════════════════════════════════════
-    with st.expander("📋 Full Indicator Readout (All 30+ Metrics)", expanded=False):
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ROW 8 â€” INDICATOR TABLE
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    with st.expander("ðŸ“‹ Full Indicator Readout (All 30+ Metrics)", expanded=False):
         riskometer.display_full_table(st)
 
-    # ── Footer ───────────────────────────────────────────────────────────────
+    # â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     st.markdown("""
     <div style='text-align:center;margin-top:2rem;padding-top:1rem;
     border-top:1px solid rgba(0,229,255,0.1);
     font-family:Share Tech Mono,monospace;font-size:0.65rem;color:#2a4a5a;'>
-    GLOBAL MARKET SHOCK ANALYZER · QUANTITATIVE RISK INTELLIGENCE · DATA: yfinance · FOR RESEARCH PURPOSES ONLY
+    GLOBAL MARKET SHOCK ANALYZER Â· QUANTITATIVE RISK INTELLIGENCE Â· DATA: yfinance Â· FOR RESEARCH PURPOSES ONLY
     </div>
     """, unsafe_allow_html=True)
 
