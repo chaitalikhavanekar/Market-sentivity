@@ -11,7 +11,7 @@ import numpy as np
 from typing import Any
 
 
-# ── Shared Theme ─────────────────────────────────────────────────────────────
+# â”€â”€ Shared Theme â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 THEME = {
     "bg":           "#050a0f",
     "bg_card":      "#0d1f35",
@@ -32,22 +32,21 @@ LAYOUT_BASE = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family=THEME["font"], color=THEME["text"], size=11),
-    margin=dict(l=10, r=10, t=30, b=10),
-    showlegend=True,
     legend=dict(
         bgcolor="rgba(0,0,0,0)",
         font=dict(size=10, color=THEME["text_muted"]),
         orientation="h", x=0, y=1.02
     ),
 )
+# margin and showlegend are set per-chart to avoid duplicate-key TypeError
 
 
 class Visualizer:
     """Factory for all dashboard Plotly visualizations."""
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # RISKOMETER GAUGE
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def render_riskometer_gauge(self, risk_result: dict) -> go.Figure:
         score = risk_result.get('risk_score', 5.0)
@@ -119,17 +118,14 @@ class Visualizer:
                 showarrow=False,
             )
 
-        fig.update_layout(
-            **LAYOUT_BASE,
-            height=280,
-            showlegend=False,
-            margin=dict(l=20, r=20, t=40, b=20),
-        )
+        layout = {**LAYOUT_BASE, "height": 280, "showlegend": False,
+                  "margin": dict(l=20, r=20, t=40, b=20)}
+        fig.update_layout(**layout)
         return fig
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # TECHNICAL CHART
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def render_technical_chart(
         self,
@@ -152,13 +148,13 @@ class Visualizer:
             row_heights=[0.55, 0.25, 0.20],
             vertical_spacing=0.04,
             subplot_titles=[
-                f"{ticker_name} — Price & Bands",
+                f"{ticker_name} â€” Price & Bands",
                 "RSI (14)",
                 "MACD"
             ]
         )
 
-        # ── Candlestick ──────────────────────────────────────────────────────
+        # â”€â”€ Candlestick â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         fig.add_trace(go.Candlestick(
             x=df.index,
             open=df['Open'], high=df['High'],
@@ -171,7 +167,7 @@ class Visualizer:
             line_width=1,
         ), row=1, col=1)
 
-        # ── Bollinger Bands ───────────────────────────────────────────────────
+        # â”€â”€ Bollinger Bands â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if tech:
             close = df['Close']
             bb_upper_series = close.rolling(20).mean() + 2 * close.rolling(20).std()
@@ -212,7 +208,7 @@ class Visualizer:
                 name="EMA 200", line=dict(color=THEME["orange"], width=1.5)
             ), row=1, col=1)
 
-            # ── RSI ──────────────────────────────────────────────────────────
+            # â”€â”€ RSI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             delta = close.diff()
             gain = delta.clip(lower=0).ewm(com=13, min_periods=14).mean()
             loss = (-delta.clip(upper=0)).ewm(com=13, min_periods=14).mean()
@@ -227,7 +223,7 @@ class Visualizer:
             fig.add_hline(y=30, line_dash="dash", line_color=THEME["green"], line_width=0.8, row=2, col=1)
             fig.add_hline(y=50, line_dash="dot", line_color=THEME["text_muted"], line_width=0.5, row=2, col=1)
 
-            # ── MACD ─────────────────────────────────────────────────────────
+            # â”€â”€ MACD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             ema12 = close.ewm(span=12, adjust=False).mean()
             ema26 = close.ewm(span=26, adjust=False).mean()
             macd_line = ema12 - ema26
@@ -248,10 +244,12 @@ class Visualizer:
                 name="Signal", line=dict(color=THEME["orange"], width=1.2)
             ), row=3, col=1)
 
-        # ── Layout ─────────────────────────────────────────────────────────
+        # â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         fig.update_layout(
             **LAYOUT_BASE,
             height=480,
+            showlegend=True,
+            margin=dict(l=10, r=10, t=30, b=10),
             xaxis_rangeslider_visible=False,
         )
         fig.update_xaxes(
@@ -261,9 +259,9 @@ class Visualizer:
         fig.update_yaxes(gridcolor=THEME["grid"], zeroline=False)
         return fig
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SENTIMENT GAUGE
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def render_sentiment_gauge(self, vix: float, pcr: float) -> go.Figure:
         fig = make_subplots(
@@ -316,9 +314,9 @@ class Visualizer:
                           margin=dict(l=10, r=10, t=25, b=5))
         return fig
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # ORDER FLOW CHART
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def render_order_flow_chart(self, df: pd.DataFrame, of_data: dict) -> go.Figure:
         if df.empty:
@@ -362,14 +360,15 @@ class Visualizer:
         ), row=2, col=1)
         fig.add_hline(y=0, line_color=THEME["text_muted"], line_width=0.8, row=2, col=1)
 
-        fig.update_layout(**LAYOUT_BASE, height=280)
+        fig.update_layout(**LAYOUT_BASE, height=280, showlegend=True,
+                          margin=dict(l=10, r=10, t=30, b=10))
         fig.update_xaxes(gridcolor=THEME["grid"], zeroline=False)
         fig.update_yaxes(gridcolor=THEME["grid"], zeroline=False)
         return fig
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SECTOR HEATMAP
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def render_sector_heatmap(self, sector_impact: dict, scenario: str) -> go.Figure:
         sectors = list(sector_impact.keys())
@@ -401,12 +400,13 @@ class Visualizer:
             textfont=dict(color=THEME["text"], size=11, family=THEME["font"]),
         ))
 
-        title = f"Sector Impact — {scenario.replace('_', ' ')}" if scenario not in ("NONE", "None") else "Sector Baseline"
+        title = f"Sector Impact â€” {scenario.replace('_', ' ')}" if scenario not in ("NONE", "None") else "Sector Baseline"
         fig.update_layout(
             **LAYOUT_BASE,
             title=dict(text=title, font=dict(size=12, family=THEME["font_title"], color=THEME["cyan"])),
             height=380,
             showlegend=False,
+            margin=dict(l=10, r=10, t=50, b=10),
             xaxis=dict(
                 range=[-4, 4],
                 gridcolor=THEME["grid"], zeroline=True,
@@ -418,9 +418,9 @@ class Visualizer:
         )
         return fig
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # MULTI-ASSET CHART
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def render_multi_asset_chart(self, raw_data: dict) -> go.Figure:
         ASSET_CONFIG = [
@@ -455,6 +455,8 @@ class Visualizer:
                 font=dict(size=12, family=THEME["font_title"], color=THEME["cyan"])
             ),
             height=320,
+            showlegend=True,
+            margin=dict(l=10, r=10, t=50, b=10),
             hovermode="x unified",
             xaxis=dict(gridcolor=THEME["grid"], zeroline=False,
                        showspikes=True, spikecolor=THEME["cyan"]),
@@ -463,9 +465,9 @@ class Visualizer:
         )
         return fig
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # SHOCK FLOW DIAGRAM
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def render_shock_flow_diagram(
         self,
@@ -484,7 +486,7 @@ class Visualizer:
         }
         shock_color = SCENARIO_COLORS.get(scenario, THEME["cyan"])
 
-        # Node positions: source → transmission → impact
+        # Node positions: source â†’ transmission â†’ impact
         nodes = {
             "shock":     (0.1, 0.5),
             # Transmission nodes
@@ -503,17 +505,17 @@ class Visualizer:
         }
 
         labels = {
-            "shock":      f"🌪 {scenario.replace('_', ' ')}",
-            "vol":        "📊 Volatility ▲",
-            "rates":      "📈 Rates",
-            "fx":         "💱 FX Moves",
-            "commodities":"🛢️ Commodities",
-            "equities":   "📉 Equities",
-            "bonds":      "🏛️ Bonds",
-            "gold":       "🥇 Gold",
-            "credit":     "💳 Credit",
-            "winners":    "🟢 WINNERS",
-            "losers":     "🔴 LOSERS",
+            "shock":      f"ðŸŒª {scenario.replace('_', ' ')}",
+            "vol":        "ðŸ“Š Volatility â–²",
+            "rates":      "ðŸ“ˆ Rates",
+            "fx":         "ðŸ’± FX Moves",
+            "commodities":"ðŸ›¢ï¸ Commodities",
+            "equities":   "ðŸ“‰ Equities",
+            "bonds":      "ðŸ›ï¸ Bonds",
+            "gold":       "ðŸ¥‡ Gold",
+            "credit":     "ðŸ’³ Credit",
+            "winners":    "ðŸŸ¢ WINNERS",
+            "losers":     "ðŸ”´ LOSERS",
         }
 
         fig = go.Figure()
@@ -574,19 +576,20 @@ class Visualizer:
         fig.update_layout(
             **LAYOUT_BASE,
             title=dict(
-                text=f"Shock Transmission Flow — {scenario.replace('_', ' ')}",
+                text=f"Shock Transmission Flow â€” {scenario.replace('_', ' ')}",
                 font=dict(size=12, family=THEME["font_title"], color=THEME["cyan"])
             ),
             height=320,
             showlegend=False,
+            margin=dict(l=10, r=10, t=50, b=10),
             xaxis=dict(visible=False, range=[-0.05, 1.15]),
             yaxis=dict(visible=False, range=[-0.1, 1.1]),
         )
         return fig
 
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     # UTILITIES
-    # ════════════════════════════════════════════════════════════════════════
+    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     def _empty_chart(self, msg: str) -> go.Figure:
         fig = go.Figure()
@@ -595,7 +598,8 @@ class Visualizer:
             font=dict(color=THEME["text_muted"], size=14, family=THEME["font"]),
             showarrow=False
         )
-        fig.update_layout(**LAYOUT_BASE, height=300)
+        fig.update_layout(**LAYOUT_BASE, height=300, showlegend=False,
+                          margin=dict(l=10, r=10, t=30, b=10))
         return fig
 
     def _hex_to_rgb(self, hex_color: str) -> str:
